@@ -1,14 +1,17 @@
-// src/lib/db.ts
 import pg from 'pg';
+import dotenv from 'dotenv';
+
+
+dotenv.config();
 
 const { Pool } = pg;
 
 const pool = new Pool({
-  user: 'venuchander',
-  host: 'localhost',
-  database: 'tsoc',
-  password: 'Postgrespro',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: Number(process.env.DB_PORT),
 });
 
 export default pool;
