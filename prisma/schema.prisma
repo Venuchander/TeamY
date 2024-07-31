@@ -1,4 +1,3 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,18 +13,20 @@ model User {
   id    Int    @id @default(autoincrement())
   email String @unique
   name  String
-}
 
-model ContactMessage {
-  id      Int    @id @default(autoincrement())
-  subject String
-  message String
-  email   String
+  MortgageRequest MortgageRequest[]
 }
 
 model MortgageRequest {
-  id               Int    @id @default(autoincrement())
-  propertyId       String
-  loanAmount       Float
-  repaymentPeriod  Int
+  id     Int    @id @default(autoincrement())
+  userId Int
+  // Other fields
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model ContactMessage {
+  id     Int    @id @default(autoincrement())
+  email  String
+  message String
+  // Other fields
 }
