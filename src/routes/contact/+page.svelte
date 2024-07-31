@@ -1,21 +1,43 @@
 <script>
+  import { invalidate } from '$app/navigation';
+
   let name = '';
   let email = '';
   let message = '';
+  let formMessage = '';
 
-  function handleSubmit() {
-    // Handle form submission logic here
-    alert(`Message sent by ${name} (${email}): ${message}`);
-    // Reset the form
-    name = '';
-    email = '';
-    message = '';
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('message', message);
+
+    const response = await fetch('/contact', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      formMessage = result.message;
+      name = '';
+      email = '';
+      message = '';
+      invalidate();
+    } else {
+      formMessage = result.errors.message;
+    }
   }
 </script>
 
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center py-12">
   <div class="bg-white shadow-md rounded-lg p-8 max-w-3xl w-full">
     <h1 class="text-3xl font-bold mb-6">Contact Us</h1>
+    {#if formMessage}
+      <p>{formMessage}</p>
+    {/if}
     <form on:submit|preventDefault={handleSubmit}>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
