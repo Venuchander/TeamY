@@ -1,0 +1,31 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Define your data models here
+
+model User {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  name  String
+}
+
+model ContactMessage {
+  id      Int    @id @default(autoincrement())
+  subject String
+  message String
+  email   String
+}
+
+model MortgageRequest {
+  id               Int    @id @default(autoincrement())
+  propertyId       String
+  loanAmount       Float
+  repaymentPeriod  Int
+}
